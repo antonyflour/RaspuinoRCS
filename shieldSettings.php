@@ -34,7 +34,6 @@ if ($stmt = $mysqli->prepare("SELECT name FROM shields WHERE mac = ?;")) {
 					<tr><td><button onClick="location.assign('formShieldName.php?mac=<?php echo $mac?>')">Cambia nome alla scheda</button></td></tr>
 					<tr><td><button onClick="location.assign('formPinName.php?mac=<?php echo $mac?>')">Cambia nome ai pin</button></td></tr>
 					<tr><td><button onClick="location.assign('formPinSettings.php?mac=<?php echo $mac?>')">Modifica impostazioni pin</button></td></tr>
-					<tr><td><button onClick="location.assign('deleteShield.php?mac=<?php echo $mac ?>')">Elimina scheda</button></td></tr>
 					<tr><td><button onClick="location.assign('shieldAdmin.php?mac=<?php echo $mac ?>')">Torna a <?php echo $nome_scheda ?></button></td></tr>
 				</table>
 			</fieldset>

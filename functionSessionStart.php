@@ -17,6 +17,6 @@ function sec_session_start($mysqli, $username, $admin) {
 	$time = date("G:i");
 	$stmt->bind_param('sssss', $key, $username, $admin, $date, $time);        
 	$stmt->execute();    // Execute the prepared query.
-	setcookie("raspuino_cookie",$key,time()+180,"/",false);
+	setcookie("raspuino_cookie",$key,time()+600,"/",false);
 }
 ?>

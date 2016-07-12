@@ -183,7 +183,9 @@ else{
 	<br>
 	<table align=center>
 	<tr>
-	<td><button onClick="location.assign('/firstAdmin.php')">Torna a Schede</button></table>
+	<td><button onClick="location.assign('/firstAdmin.php')">Torna a Schede</button>
+	<td><button onClick="location.assign('deleteShield.php?mac=<?php echo $mac ?>')">Elimina scheda</button></td></tr>
+	</table>
 	</fieldset>
  	</div>
 </div>
