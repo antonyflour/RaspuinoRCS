@@ -275,10 +275,12 @@ else{
 
 ?>
 	<br>
-		<table align=center><tr><td><button onClick="location.reload();">Ricarica</button></table>
-		<br>
-		<br>
-		<table align=center><tr><td><button onClick="location.assign('/firstUser.php');">Torna a Schede</button></table>
+		<table class='tablebutton'>
+			<tr>
+				<td><button onClick="location.assign('/firstUser.php');">Indietro</button>
+				<td></td>
+				<td><button onClick="location.reload();">Ricarica</button>
+		</table>
 	</fieldset>
  	</div>
 </div>
