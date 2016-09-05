@@ -1,5 +1,4 @@
-
-#include <Ethernet.h>
+#include <Ethernet2.h>
 #include <EthernetClient.h>
 #include <EthernetServer.h>
 #include <SPI.h>
@@ -9,8 +8,10 @@
 //used to save the output state: 1 bit for output pin
 EEPROMClassEx mem;
 
-//number of pins used (equals for input and output)
-#define numPin 
+
+#define numInPin 
+#define numOutPin 
+
 byte output_pins[] = {}; //insert array output pin es.{2,3,4,5,6,7}
 byte input_pins[] = {}; // insert array input pin es.{14,15,16,17,18,19}
 
@@ -27,9 +28,12 @@ String request;
 long lastTime;
 
 void setup() {
-  for(int i=0;i<numPin;i++){
-    pinMode(output_pins[i],OUTPUT);
+  for(int i=0;i<numInPin;i++){
     pinMode(input_pins[i],INPUT);
+    
+  }
+  for(int i=0;i<numOutPin;i++){
+    pinMode(output_pins[i],OUTPUT);
     //load the last output state
     int address = i/8;  
     byte pos = i%8;
@@ -123,7 +127,7 @@ void loop(){
     }
     // save the current output state on EEPROM every 10 seconds
     if(millis()-lastTime>10000){
-      for(int i=0;i<numPin;i++){
+      for(int i=0;i<numOutPin;i++){
         int address = i/8;
         byte pos = i%8;
         if(digitalRead(output_pins[i])==HIGH){
@@ -144,13 +148,13 @@ void loop(){
  */
 String getVettoreStato(){
   String arrayStato = "";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numInPin;i++)
    {
     if(digitalRead(input_pins[i])==HIGH) 
       arrayStato+="1";
     else 
       arrayStato+="0";
-    if(i!=(numPin-1))
+    if(i!=(numInPin-1))
       arrayStato+=",";
    }
    return arrayStato;
@@ -161,10 +165,10 @@ String getVettoreStato(){
  */
 String getInputPinJSON(){
   String arrayNum="[";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numInPin;i++)
    { 
     arrayNum+=(String(input_pins[i]));
-    if(i!=(numPin-1))
+    if(i!=(numInPin-1))
       arrayNum+=",";
    }
    arrayNum+="]";
@@ -173,10 +177,10 @@ String getInputPinJSON(){
 
 String getOutputPinJSON(){
   String arrayNum="[";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numOutPin;i++)
    { 
     arrayNum+=(String(output_pins[i]));
-    if(i!=(numPin-1))
+    if(i!=(numOutPin-1))
       arrayNum+=",";
    }
    arrayNum+="]";
@@ -185,13 +189,13 @@ String getOutputPinJSON(){
 
 String getInputStatusJSON(){
   String array="[";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numInPin;i++)
    { 
     if(digitalRead(input_pins[i])==HIGH)
       array+="1";
     else
       array+="0"; 
-    if(i!=(numPin-1))
+    if(i!=(numInPin-1))
       array+=",";
    }
    array+="]";
@@ -200,13 +204,13 @@ String getInputStatusJSON(){
 
 String getOutputStatusJSON(){
     String array="[";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numOutPin;i++)
    { 
     if(digitalRead(output_pins[i])==HIGH)
       array+="1";
     else
       array+="0"; 
-    if(i!=(numPin-1))
+    if(i!=(numOutPin-1))
       array+=",";
    }
    array+="]";
