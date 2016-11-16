@@ -1,16 +1,22 @@
-
 #include <Ethernet2.h>
 #include <EthernetClient.h>
 #include <EthernetServer.h>
 #include <SPI.h>
+#include <EEPROMex.h>
+#include <EEPROMVar.h>
 
-//number of pins used (equals for input and output)
-#define numPin 6
-byte output_pins[] = //insert array output pin es.{2,3,4,5,6,7}
-byte input_pins[] = // insert array input pin es.{14,15,16,17,18,19}
+//used to save the output state: 1 bit for output pin
+EEPROMClassEx mem;
 
-byte mac[] = //insert MAC
-String my_mac= //insert MAC as String es. "90-A2-DA-10-21-A9"
+
+#define numInPin 
+#define numOutPin 
+
+byte output_pins[] = {}; //insert array output pin es.{2,3,4,5,6,7}
+byte input_pins[] = {}; // insert array input pin es.{14,15,16,17,18,19}
+
+byte mac[]={}; //insert MAC
+String my_mac=""; //insert MAC as String es. "90-A2-DA-10-21-A9"
 
 
 IPAddress ip();  //insert ip for this shield
@@ -19,16 +25,34 @@ EthernetClient client;
 
 String request;
 
+long lastTime;
+
 void setup() {
-  Serial.begin(9600);
-  for(int i=0;i<numPin;i++){
-    pinMode(output_pins[i],OUTPUT);
+  for(int i=0;i<numInPin;i++){
     pinMode(input_pins[i],INPUT);
+    
+  }
+  for(int i=0;i<numOutPin;i++){
+    pinMode(output_pins[i],OUTPUT);
+    //load the last output state
+    int address = i/8;  
+    byte pos = i%8;
+    bool value = mem.readBit(address, pos);
+    if(value==1){
+      digitalWrite(output_pins[i], HIGH);  
+    }
+    else{
+      digitalWrite(output_pins[i], LOW);  
+    }
   }
   
+  pinMode(4, OUTPUT);  //pin SDcard on EthernetShield  
+  digitalWrite(4, HIGH);
   pinMode(10, OUTPUT); //pin ETHCS
   digitalWrite(10,HIGH); //impostiamo il pin ETHCS al valore alto per evitare problemi al caricamento della pagina
   
+  lastTime=0;
+
   Ethernet.begin(mac, ip);
   server.begin();
   // give the Ethernet shield a second to initialize:
@@ -101,7 +125,20 @@ void loop(){
         }
       }
     }
-    // give the web browser time to receive the data
+    // save the current output state on EEPROM every 10 seconds
+    if(millis()-lastTime>10000){
+      for(int i=0;i<numOutPin;i++){
+        int address = i/8;
+        byte pos = i%8;
+        if(digitalRead(output_pins[i])==HIGH){
+          mem.updateBit(address, pos, 1);
+        }
+        else{
+          mem.updateBit(address, pos, 0); 
+        }
+      }
+      lastTime=millis();
+    }
     delay(10);
 }
 
@@ -111,13 +148,13 @@ void loop(){
  */
 String getVettoreStato(){
   String arrayStato = "";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numInPin;i++)
    {
     if(digitalRead(input_pins[i])==HIGH) 
       arrayStato+="1";
     else 
       arrayStato+="0";
-    if(i!=(numPin-1))
+    if(i!=(numInPin-1))
       arrayStato+=",";
    }
    return arrayStato;
@@ -128,10 +165,10 @@ String getVettoreStato(){
  */
 String getInputPinJSON(){
   String arrayNum="[";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numInPin;i++)
    { 
     arrayNum+=(String(input_pins[i]));
-    if(i!=(numPin-1))
+    if(i!=(numInPin-1))
       arrayNum+=",";
    }
    arrayNum+="]";
@@ -140,10 +177,10 @@ String getInputPinJSON(){
 
 String getOutputPinJSON(){
   String arrayNum="[";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numOutPin;i++)
    { 
     arrayNum+=(String(output_pins[i]));
-    if(i!=(numPin-1))
+    if(i!=(numOutPin-1))
       arrayNum+=",";
    }
    arrayNum+="]";
@@ -152,13 +189,13 @@ String getOutputPinJSON(){
 
 String getInputStatusJSON(){
   String array="[";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numInPin;i++)
    { 
     if(digitalRead(input_pins[i])==HIGH)
       array+="1";
     else
       array+="0"; 
-    if(i!=(numPin-1))
+    if(i!=(numInPin-1))
       array+=",";
    }
    array+="]";
@@ -167,13 +204,13 @@ String getInputStatusJSON(){
 
 String getOutputStatusJSON(){
     String array="[";
-  for(int i=0;i<numPin;i++)
+  for(int i=0;i<numOutPin;i++)
    { 
     if(digitalRead(output_pins[i])==HIGH)
       array+="1";
     else
       array+="0"; 
-    if(i!=(numPin-1))
+    if(i!=(numOutPin-1))
       array+=",";
    }
    array+="]";
