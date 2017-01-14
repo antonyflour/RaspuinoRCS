@@ -1,0 +1,7 @@
+per reboot.php e shutdown.php è necessario:
+
+-eseguire il comando: 
+	$ sudo visudo
+-aggiungere la riga  (www-data è lo user di nginx, è possibile trovarlo in /etc/nginx/nginx.conf):
+	www-data ALL = NOPASSWD: /sbin/reboot, /sbin/halt, /sbin/shutdown
+	

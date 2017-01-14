@@ -21,6 +21,8 @@ if($code_login <0) {
 				<table align=center cellpadding=5>
 					<tr><td><button onClick="location.assign('formChangePassword.php')">Cambia Password</button></td></tr>
 					<tr><td><button onClick="location.assign('<?php if($code_login==1){echo "firstAdmin.php";} else{echo "firstUser.php";}?>')">Torna a Schede</button></td></tr>
+					<?php if($code_login==1){echo "<tr><td><button onClick='location.assign(\"reboot.php\")'>Riavvia dispositivo</button></td></tr>";}?>
+					<?php if($code_login==1){echo "<tr><td><button onClick='location.assign(\"shutdown.php\")'>Spegni dispositivo</button></td></tr>";}?>
 				</table>
 			</fieldset>
 		</div>
