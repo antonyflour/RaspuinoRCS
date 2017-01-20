@@ -16,7 +16,7 @@ On Raspberry Pi: <br>
 7. Install php5-mysql module: <code>sudo apt-get install php5-mysql</code><br>
 8. Create new database using mysql console.<br>
 9. Modify <code>connectionConfig.php</code> file by entering your credentials and name of created database.<br>
-10. Change permission to <code>var/www</code> folder on Raspberry:  <code> sudo chmod -R 777 www</code>
+10. Change permission to <code>var/www</code> folder on Raspberry:  <code> sudo chmod -R 777 www</code><br>
 11. Copy all folders and files of RaspuinoRCS-master into <code>/var/www/html</code> using FileZilla or another sftp client.<br>
 12. Using an http client to establish connection to your Raspberry Pi: <code>http://{raspberry-ip}:{port}/init/create_tables.php</code><br>
 13. Since this moment you can use your RaspuinoRCS by connect to <code>http://{raspberry-ip}:{port}</code><br>
