@@ -1,5 +1,6 @@
 <?php
 include_once 'functionCheckLogin.php';
+include_once 'log_function.php';
  
 $admin_code = login_check($mysqli);
 if ($admin_code >=0) {
@@ -23,6 +24,7 @@ if ($admin_code >=0) {
 		curl_close($curl);
 	if($curl_info['http_code']==200){
 		http_response_code(200);
+		event_log("Cambiato stato pin da ".$_SERVER['REMOTE_ADDR']."\t ip_scheda: ".$ip."\t pin: ".$pin."\t stato: ".$stato);
 	}
 	else{
 		http_response_code(405);

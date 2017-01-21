@@ -1,5 +1,6 @@
 <?php
 include_once 'functionCheckLogin.php';
+include_once 'log_function.php';
 
 $code_login = login_check($mysqli);	
 if($code_login <0) {
@@ -21,10 +22,9 @@ if(isset($_POST['username'], $_POST['oldpass'], $_POST['pass'])){
           $stmt->bind_param("ss", $_POST['pass'], $_POST['username']);
           $stmt->execute();   
           $stmt->store_result();
+		  event_log("Password cambiata da ".$_SERVER['REMOTE_ADDR']."\t username: ". $_POST['username']);
           //effettuo il logout
-          $stmt = $mysqli->prepare("DELETE from sessions;");
-          $stmt->execute();
-          echo "<html><head></head><body><script>alert('Password cambiata con successo!'); location.assign('/index.php');</script></body></html>";
+          echo "<html><head></head><body><script>alert('Password cambiata con successo!'); location.assign('/logout.php');</script></body></html>";
         }
         else{
           echo "<html><head></head><body><script>alert('Impossibile accedere al database per il cambio della password! Password non cambiata!'); location.assign('/index.php');</script></body></html>";

@@ -25,7 +25,7 @@ if($code_login <0) {
         $stmt->store_result();
 	
         if ($stmt->num_rows == 0) {
-		echo " Non ci sono schede collegate ";
+		    echo " Non ci sono schede collegate ";
         }
 	else{
 		echo "<table class='tableuser' border=1 align=center cellpadding=5 cellspacing=0>";
