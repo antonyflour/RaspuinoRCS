@@ -1,0 +1,12 @@
+1. creare certificato SSL (verrà salvato in /etc/ssl) con:
+  
+  sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+ 
+2. modificare il file /etc/nginx/sites-enabled/default, aggiungendo le seguenti linee dopo "listen [::]:80 default_server":
+  
+  listen 443 ssl default_server;
+  ssl_certificate /etc/nginx/ssl/nginx.crt;
+  ssl_certificate_key /etc/nginx/ssl/nginx.key;
+  listen [::]:443 ssl default_server;
+  
+  
